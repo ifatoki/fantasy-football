@@ -2,7 +2,7 @@ const { Op } = require('sequelize');
 const { User } = require('../../models');
 const { userErrors } = require('../utils/Errors');
 const { createTeam } = require('./team');
-const { throwError } = require('../utils/GenericHelpers');
+const { throwError } = require('../utils/Generic');
 
 /**
  * Confirm if email is unique

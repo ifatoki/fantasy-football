@@ -1,7 +1,7 @@
 const express = require('express');
 const publicRoutes = require('./public');
 const secureRoutes = require('./secure');
-const { injectMockUser } = require('../controllers/utils/AuthenticationHelpers');
+const { injectMockUser } = require('../controllers/utils/Authentication');
 
 const router = express.Router();
 

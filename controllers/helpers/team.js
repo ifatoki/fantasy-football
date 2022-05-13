@@ -1,7 +1,7 @@
 const { faker } = require('@faker-js/faker');
 const { Team } = require('../../models');
 const { TeamErrors } = require('../utils/Errors');
-const { throwError } = require('../utils/GenericHelpers');
+const { throwError } = require('../utils/Generic');
 const { createPlayer } = require('./players');
 
 // /**

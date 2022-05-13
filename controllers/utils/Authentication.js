@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const { faker } = require('@faker-js/faker');
 const { userErrors } = require('./Errors');
-const GenericHelpers = require('./GenericHelpers');
+const { throwError } = require('./Generic');
 
 /**
  * Compare user supplied password to hashed user password.
@@ -15,7 +15,7 @@ const GenericHelpers = require('./GenericHelpers');
 const comparePassword = (userPassword, user) => {
   const match = bcrypt.compareSync(userPassword, user.hashedPassword);
 
-  if (!match) GenericHelpers.throwError(userErrors.USER_INVALID_PASSWORD);
+  if (!match) throwError(userErrors.USER_INVALID_PASSWORD);
   return user;
 };
 

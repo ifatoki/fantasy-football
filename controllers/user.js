@@ -2,8 +2,8 @@ const Validator = require('./utils/Validator');
 const {
   confirmEmailUniqueness, getUserByIdentifier, createUser, sendUser
 } = require('./helpers/user');
-const { comparePassword, encryptPassword } = require('./utils/AuthenticationHelpers');
-const { resolveError, sendMessage, stringifyValidationErrors } = require('./utils/GenericHelpers');
+const { comparePassword, encryptPassword } = require('./utils/Authentication');
+const { resolveError, sendMessage, stringifyValidationErrors } = require('./utils/Generic');
 
 /**
  * Sign user in

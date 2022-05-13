@@ -1,7 +1,7 @@
 const { faker } = require('@faker-js/faker');
 const { Player } = require('../../models');
 const { playerErrors } = require('../utils/Errors');
-const { throwError, getRandomDOB } = require('../utils/GenericHelpers');
+const { throwError, getRandomDOB } = require('../utils/Generic');
 
 // /**
 //  * Confirm if email is unique
