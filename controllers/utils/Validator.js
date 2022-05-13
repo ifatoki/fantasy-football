@@ -1,5 +1,5 @@
-import validator from 'validator';
-import isEmpty from 'lodash/isEmpty';
+const validator = require('validator');
+const isEmpty = require('lodash/isEmpty');
 
 /**
  * Create an object to hold all errors and isValid property.
@@ -20,7 +20,7 @@ const resolveErrors = (errors) => ({
  *
  * @class Validator
  */
-export default class Validator {
+class Validator {
   /**
    * Validate data for creating new message and adding it to a group
    * @function validateAddNewMessageToGroup
@@ -156,11 +156,11 @@ export default class Validator {
    * @memberof Validator
    */
   static validateSignUp({
-    username, email, password, confirmPassword
+    alias, email, password, confirmPassword
   }) {
     this.errors = {};
-    if (username === undefined || validator.isEmpty(username.toString())) {
-      this.errors.username = 'username is required';
+    if (alias === undefined || validator.isEmpty(alias.toString())) {
+      this.errors.alias = 'alias is required';
     }
     if (email === undefined || validator.isEmpty(email.toString())) {
       this.errors.email = 'email is required';
@@ -181,3 +181,8 @@ export default class Validator {
     return resolveErrors(this.errors);
   }
 }
+
+module.exports = Validator;
+
+
+// "$2a$10$4KKjllx8kzFotk/T5uW1fuDTM.2LiBWN7EGeqeNwEqOWsxl6i/fDq"

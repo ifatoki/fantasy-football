@@ -24,10 +24,12 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING
     },
     value: {
-      type: DataTypes.DECIMAL
+      type: DataTypes.DECIMAL,
+      defaultValue: 1000000
     },
-    class: {
-      type: DataTypes.STRING
+    position: {
+      type: DataTypes.ENUM,
+      values: ['gk', 'def', 'mid', 'att']
     },
     dob: {
       type: DataTypes.DATE

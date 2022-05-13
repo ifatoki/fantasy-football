@@ -11,6 +11,7 @@
         "ecmaVersion": "latest"
     },
     "rules": {
+        "consistent-return": 0,
         "comma-dangle": 0,
         "no-shadow": ["error", { "allow": ["req", "res", "err"] }]
     }

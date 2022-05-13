@@ -14,7 +14,8 @@ module.exports = (sequelize, DataTypes) => {
   }
   User.init({
     alias: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      allowNull: false
     },
     email: {
       type: DataTypes.STRING,
@@ -22,9 +23,9 @@ module.exports = (sequelize, DataTypes) => {
       unique: true
     },
     hashedPassword: {
-      type: DataTypes.STRING(64),
+      type: DataTypes.STRING(60),
       validate: {
-        is: /^[0-9a-f]{64}$/i
+        is: /^\S{60}$/
       }
     }
   }, {

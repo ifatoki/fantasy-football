@@ -19,7 +19,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DECIMAL
     },
     status: {
-      type: DataTypes.STRING
+      type: DataTypes.ENUM,
+      values: ['complete', 'pending', 'removed'],
+      defaultValue: 'pending'
     },
     completedAt: {
       type: DataTypes.DATE,

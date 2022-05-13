@@ -25,12 +25,12 @@
   },
   "homepage": "https://github.com/andela-ifatoki/postit#readme",
   "dependencies": {
+    "@faker-js/faker": "^6.3.1",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
     "debug": "^4.3.4",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
-    "faker": "^5.5.3",
     "http-errors": "^2.0.0",
     "lodash": "^4.17.21",
     "morgan": "^1.10.0",

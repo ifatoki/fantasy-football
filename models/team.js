@@ -21,7 +21,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING
     },
     budget: {
-      type: DataTypes.DECIMAL
+      type: DataTypes.DECIMAL,
+      defaultValue: 5000000
     }
   }, {
     sequelize,
