@@ -93,10 +93,21 @@ const throwError = (errorMessage) => {
  */
 const getRandomDOB = () => new Date('01/28/1991');
 
+/**
+ * Returns a random number between min (inclusive) and max (exclusive)
+ *
+ * @param {number} min - Minimum number(inclusive)
+ * @param {number} max - Maximum number(exclusive)
+ *
+ * @return {number} - Random percentage
+ */
+const getRandomPercentage = (min = 10, max = 101) => Math.random() * (max - min) + min;
+
 module.exports = {
   resolveError,
   sendMessage,
   stringifyValidationErrors,
   throwError,
-  getRandomDOB
+  getRandomDOB,
+  getRandomPercentage
 };

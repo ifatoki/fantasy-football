@@ -7,12 +7,20 @@ const userErrors = {
 
 const teamErrors = {
   TEAM_NOT_FOUND: 302,
-  TEAM_INVALID_ID: 303
+  TEAM_INVALID_ID: 303,
+  TEAM_INSUFFICIENT_BUDGET: 304
 };
 
 const playerErrors = {
   PLAYER_NOT_FOUND: 402,
   PLAYER_INVALID_ID: 403
+};
+
+const transferErrors = {
+  TRANSFER_LISTING_NOT_FOUND: 502,
+  TRANSFER_INVALID_ID: 503,
+  TRANSFER_COMPLETED_ALREADY: 504,
+  TRANSFER_DELISTED_ALREADY: 505
 };
 
 const genericErrors = {
@@ -24,5 +32,6 @@ module.exports = {
   userErrors,
   teamErrors,
   playerErrors,
+  transferErrors,
   genericErrors
 };

@@ -1,8 +1,8 @@
 const { faker } = require('@faker-js/faker');
 const { Team } = require('../../models');
-const { TeamErrors } = require('../utils/Errors');
+const { TeamErrors, teamErrors } = require('../utils/Errors');
 const { throwError } = require('../utils/Generic');
-const { createPlayer } = require('./players');
+const { createPlayer } = require('./player');
 
 // /**
 //  * Confirm if email is unique
@@ -21,17 +21,54 @@ const { createPlayer } = require('./players');
 // };
 
 /**
- * Confirm the existence of a user with the passed id
- * @function confirmUserExists
+ * Confirm the existence of a Team with the passed id
+ * @function confirmTeamExists
  *
- * @param {number} id - User id to be validated
+ * @param {number} id - Team id to be validated
  *
- * @returns {Promise<User>} - Resolves to user or an error.
+ * @returns {Promise<Team>} - Resolves to team or an error.
  */
 const confirmTeamExists = async (id) => {
   const team = await Team.findById(id);
 
   if (!team) throwError(TeamErrors.TEAM_NOT_FOUND);
+  return team;
+};
+
+/**
+ * Debit an amount from a team
+ * @function debitTeam
+ *
+ * @param {number} id - Team Id
+ * @param {number} amount - Amount to be deducted from the team budget
+ *
+ * @returns {Promise<Team>} - Resolves to the team.
+ */
+const debitTeam = async (id, amount) => {
+  const team = await confirmTeamExists(id);
+  let { budget } = team;
+
+  if (budget < amount) throwError(teamErrors.TEAM_INSUFFICIENT_BUDGET);
+  budget -= amount;
+  await team.set({ budget }).save();
+  return team;
+};
+
+/**
+ * Credit an amount to a team
+ * @function creditTeam
+ *
+ * @param {number} id - Team Id
+ * @param {number} amount - Amount to be included to the team budget
+ *
+ * @returns {Promise<Team>} - Resolves to the team.
+ */
+const creditTeam = async (id, amount) => {
+  const team = await confirmTeamExists(id);
+  let { budget } = team;
+
+  budget += amount;
+  await team.set({ budget }).save();
   return team;
 };
 
@@ -133,5 +170,7 @@ const createTeam = async () => {
 
 module.exports = {
   createTeam,
+  creditTeam,
+  debitTeam,
   confirmTeamExists
 };
