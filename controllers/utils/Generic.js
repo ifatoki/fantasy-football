@@ -161,6 +161,25 @@ const getRandomDOB = () => new Date('01/28/1991');
  */
 const getRandomPercentage = (min = 10, max = 101) => Math.random() * (max - min) + min;
 
+/**
+ * Calculates and returns age based on birthDate
+ * @function getAge
+ *
+ * @param {date} birthDate - Date of birth
+ *
+ * @returns {number} - Age
+ */
+const getAge = (birthDate) => {
+  const today = new Date();
+  const monthDiff = today.getMonth() - birthDate.getMonth();
+  let age = today.getFullYear() - birthDate.getFullYear();
+
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+    age -= 1;
+  }
+  return age;
+};
+
 module.exports = {
   resolveError,
   sendMessage,
@@ -168,5 +187,6 @@ module.exports = {
   stringifyValidationErrors,
   throwError,
   getRandomDOB,
-  getRandomPercentage
+  getRandomPercentage,
+  getAge
 };

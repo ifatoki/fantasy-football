@@ -1,4 +1,5 @@
 const { Model } = require('sequelize');
+const { getAge } = require('../controllers/utils/Generic');
 
 module.exports = (sequelize, DataTypes) => {
   class Player extends Model {
@@ -39,6 +40,15 @@ module.exports = (sequelize, DataTypes) => {
     },
     dob: {
       type: DataTypes.DATE
+    },
+    age: {
+      type: DataTypes.VIRTUAL,
+      get() {
+        return getAge(this.getDataValue('dob'));
+      },
+      set() {
+        throw new Error('Do not try to set the `age` value!');
+      }
     }
   }, {
     sequelize,
