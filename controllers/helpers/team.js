@@ -55,6 +55,25 @@ const getTeam = async (id, includePlayers = false) => {
 };
 
 /**
+ * Change team name and / or country
+ * @function editTeam
+ *
+ * @param {number} id - Team id
+ * @param {object} data - Data to append to the team
+ *
+ * @return {Promise<Team>} - Resolves to the edited team
+ */
+const editTeam = async (id, { name, country }) => {
+  const data = {};
+  let team = await confirmTeamExists(id);
+
+  if (name) data.name = name;
+  if (country) data.country = country;
+  team = await team.set(data).save();
+  return team;
+};
+
+/**
  * Debit an amount from a team
  * @function debitTeam
  *
@@ -144,5 +163,6 @@ module.exports = {
   creditTeam,
   debitTeam,
   confirmTeamExists,
-  getTeam
+  getTeam,
+  editTeam
 };

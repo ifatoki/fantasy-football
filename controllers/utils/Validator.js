@@ -191,6 +191,18 @@ class Validator {
 
     return resolveErrors(this.errors);
   }
+
+  static validateTeamEdit({ name, country }) {
+    this.errors = {};
+    if (
+      (name === undefined || validator.isEmpty(name.toString()))
+      && (country === undefined || validator.isEmpty(country.toString()))
+    ) {
+      this.errors.name = "at least one of 'name' and 'country' is required";
+    }
+
+    return resolveErrors(this.errors);
+  }
 }
 
 module.exports = Validator;

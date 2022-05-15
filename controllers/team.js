@@ -19,7 +19,7 @@ const {
   playerErrors,
   genericErrors
 } = require('./utils/Errors');
-const { getTeam } = require('./helpers/team');
+const { getTeam, editTeam } = require('./helpers/team');
 
 /**
  * Handles getting team details
@@ -38,6 +38,23 @@ const getTeamController = async (req, res) => {
     sendData({ team }, 200, 'success', res);
   } catch (e) {
     resolveError(e, res);
+  }
+};
+
+const editTeamController = async (req, res) => {
+  const validator = Validator.validateTeamEdit(req.body);
+
+  if (validator.isValid) {
+    try {
+      const { TeamId } = req.user;
+      const team = await editTeam(TeamId, req.body);
+
+      sendData({ team }, 200, 'success', res);
+    } catch (e) {
+      resolveError(e, res);
+    }
+  } else {
+    sendMessage(stringifyValidationErrors(validator.errors), 400, 'failed', res);
   }
 };
 
@@ -124,6 +141,7 @@ const playerDelistingController = async (req, res) => {
 };
 
 module.exports = {
+  editTeamController,
   getTeamController,
   playerListingController,
   playerDelistingController,

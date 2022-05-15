@@ -3,14 +3,17 @@ const {
   playerListingController,
   playerDelistingController,
   playerBuyingController,
-  getTeamController
+  getTeamController,
+  editTeamController
 } = require('../../controllers/team');
 const { getUserController } = require('../../controllers/user');
 
 const router = express.Router();
 
 router.get('/user', getUserController);
+
 router.get('/team', getTeamController);
+router.put('/team/edit', editTeamController);
 
 router.post('/players/:id/list', playerListingController);
 router.put('/players/:id/buy', playerBuyingController);
