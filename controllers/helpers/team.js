@@ -116,6 +116,7 @@ const initializePlayers = async (team) => {
   const players = await Promise.all(playersPromises);
 
   team.addPlayers(players);
+  await team.set({ value: 1000000 * players.length }).save();
 };
 
 /**

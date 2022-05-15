@@ -126,8 +126,17 @@ const completeTransfer = async (id, buyerId) => {
     const buyer = await debitTeam(buyerId, price);
     await creditTeam(seller.id, price);
     await listing.setToTeam(buyer);
+
+    const buyerValue = buyer.value;
+    const sellerValue = seller.value;
+
+    // Subtract presale value from seller value
+    await seller.set({ value: sellerValue - player.value }).save();
     await buyer.addPlayer(player);
     await player.set({ value: value * (1 + (getRandomPercentage() / 100)) }).save();
+
+    // Add postsale value to buyer value
+    await buyer.set({ value: buyerValue + player.value }).save();
     await listing.set({ status: 'complete', completedAt: Date.now() }).save();
     return listing;
   } catch (e) {

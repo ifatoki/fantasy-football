@@ -31,15 +31,12 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     value: {
-      type: DataTypes.VIRTUAL,
+      type: DataTypes.BIGINT,
       get() {
-        const players = this.Players;
-
-        const val = players.reduce((sum, player) => (sum + player.value), 0);
-        return val;
+        return this.getDataValue('value') / 100;
       },
-      set() {
-        throw new Error('Do not try to set the value field');
+      set(value) {
+        this.setDataValue('value', Math.floor(value * 100));
       }
     }
   }, {
