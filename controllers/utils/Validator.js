@@ -180,9 +180,17 @@ class Validator {
 
     return resolveErrors(this.errors);
   }
+
+  static validatePlayerListing({ askingPrice }) {
+    this.errors = {};
+    if (askingPrice === undefined || validator.isEmpty(askingPrice.toString())) {
+      this.errors.askingPrice = 'askingPrice is required';
+    } else if (!validator.isNumeric(askingPrice.toString())) {
+      this.errors.askingPrice = 'askingPrice is invalid';
+    }
+
+    return resolveErrors(this.errors);
+  }
 }
 
 module.exports = Validator;
-
-
-// "$2a$10$4KKjllx8kzFotk/T5uW1fuDTM.2LiBWN7EGeqeNwEqOWsxl6i/fDq"

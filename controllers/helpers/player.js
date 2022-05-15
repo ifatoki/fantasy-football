@@ -28,10 +28,24 @@ const { throwError, getRandomDOB } = require('../utils/Generic');
  * @returns {Promise<Player>} - Resolves to player or an error.
  */
 const confirmPlayerExists = async (id) => {
-  const player = await Player.findById(id);
+  const player = await Player.findByPk(id);
 
   if (!player) throwError(playerErrors.PLAYER_NOT_FOUND);
   return player;
+};
+
+/**
+ * Get the current open transfer listing for this player
+ * @function getCurrentOpenPlayerListing
+ *
+ * @param {Player} player - Player
+ *
+ * @return {Promise<Transfer>} - Resolves to the open transfer listing for this player
+ */
+const getCurrentOpenPlayerListing = async (player) => {
+  const transfers = await player.getTransfers();
+
+  return transfers.find(({ status }) => (status === 'pending'));
 };
 
 /**
@@ -109,5 +123,6 @@ const createPlayer = async (position) => {
 
 module.exports = {
   createPlayer,
-  confirmPlayerExists
+  confirmPlayerExists,
+  getCurrentOpenPlayerListing
 };

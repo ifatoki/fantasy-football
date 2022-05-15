@@ -1,5 +1,12 @@
 const lodash = require('lodash');
-const { userErrors } = require('./Errors');
+const {
+  userErrors,
+  teamErrors,
+  playerErrors,
+  transferErrors,
+  authenticationErrors,
+  genericErrors
+} = require('./Errors');
 
 /**
  * Send a message response for the server
@@ -42,17 +49,57 @@ const resolveError = (error, res) => {
       message = 'user with this email already exists';
       status = 409;
       break;
-    case userErrors.USER_DUPLICATE_USERNAME:
-      status = 409;
-      message = 'user with this username already exists';
-      break;
     case userErrors.USER_INVALID_PASSWORD:
       status = 401;
       message = 'incorrect password';
       break;
     case userErrors.USER_NOT_FOUND:
+    case userErrors.USER_INVALID_ID:
       status = 404;
       message = 'user not found';
+      break;
+    case teamErrors.TEAM_NOT_FOUND:
+    case teamErrors.TEAM_INVALID_ID:
+      status = 404;
+      message = 'team not found';
+      break;
+    case teamErrors.TEAM_INSUFFICIENT_BUDGET:
+      status = 200;
+      message = 'team budget insufficient';
+      break;
+    case teamErrors.TEAM_PLAYER_ALREADY_OWNED:
+      status = 409;
+      message = 'player already part of team';
+      break;
+    case playerErrors.PLAYER_NOT_FOUND:
+    case playerErrors.PLAYER_INVALID_ID:
+      status = 404;
+      message = 'player not found';
+      break;
+    case playerErrors.PLAYER_NOT_TRANSFER_LISTED:
+      status = 403;
+      message = 'player not transfer listed';
+      break;
+    case transferErrors.TRANSFER_LISTING_NOT_FOUND:
+    case transferErrors.TRANSFER_INVALID_ID:
+      status = 404;
+      message = 'transfer listing not found';
+      break;
+    case transferErrors.TRANSFER_COMPLETED_ALREADY:
+      status = 200;
+      message = 'player already sold';
+      break;
+    case transferErrors.TRANSFER_DELISTED_ALREADY:
+      status = 200;
+      message = 'player already removed from transfer list';
+      break;
+    case transferErrors.TRANSFER_LISTED_ALREADY:
+      status = 409;
+      message = 'player already on transfer list';
+      break;
+    case genericErrors.UNAUTHORIZED:
+      status = 403;
+      message = 'unauthorized action';
       break;
     case authenticationErrors.AUTH_INVALID_TOKEN:
       status = 401;
@@ -117,6 +164,7 @@ const getRandomPercentage = (min = 10, max = 101) => Math.random() * (max - min)
 module.exports = {
   resolveError,
   sendMessage,
+  sendData,
   stringifyValidationErrors,
   throwError,
   getRandomDOB,

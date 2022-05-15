@@ -1,7 +1,13 @@
 const { Transfer } = require('../../models');
-const { transferErrors } = require('../utils/Errors');
-const { throwError, getRandomPercentage } = require('../utils/Generic');
-const { confirmPlayerExists } = require('./player');
+const {
+  transferErrors,
+  teamErrors
+} = require('../utils/Errors');
+const {
+  throwError,
+  getRandomPercentage
+} = require('../utils/Generic');
+const { getCurrentOpenPlayerListing } = require('./player');
 const { debitTeam, creditTeam } = require('./team');
 
 /**
@@ -13,7 +19,7 @@ const { debitTeam, creditTeam } = require('./team');
  * @returns {Promise<Transer>} - Resolves to the transfer listing.
  */
 const confirmListingExists = async (id) => {
-  const transfer = await Transfer.findById(id);
+  const transfer = await Transfer.findByPk(id);
 
   if (!transfer) throwError(transferErrors.TRANSFER_LISTING_NOT_FOUND);
   return transfer;
@@ -54,14 +60,16 @@ const confirmListingIsPending = async (id) => {
  * Adds a player to the transfer list
  * @function listPlayer
  *
- * @param {number} id - Player id
+ * @param {object} player - Player object
  * @param {number} askingPrice - Asking price for the player
  *
  * @returns {Promise<Transfer>} - Resolves to the Transfer listing.
  */
-const listPlayer = async (id, askingPrice) => {
+const listPlayer = async (player, askingPrice) => {
   try {
-    const player = await confirmPlayerExists(id);
+    const openListing = await getCurrentOpenPlayerListing(player);
+
+    if (openListing) throwError(transferErrors.TRANSFER_LISTED_ALREADY);
     const team = await player.getTeam();
     const listing = await Transfer.create({
       price: askingPrice
@@ -89,7 +97,7 @@ const delistTransfer = async (id) => {
   try {
     const listing = await confirmListingIsPending(id);
 
-    return listing.set({ status: 'removed' }).save();
+    return listing.set({ status: 'removed', removedAt: Date.now() }).save();
   } catch (e) {
     throwError(e.message);
   }
@@ -112,73 +120,20 @@ const completeTransfer = async (id, buyerId) => {
     const { price } = listing;
     const { value } = player;
 
-    // deduct price from buyers budget (check if they can afford it)
+    if (seller.id === buyerId) {
+      throwError(teamErrors.TEAM_PLAYER_ALREADY_OWNED);
+    }
     const buyer = await debitTeam(buyerId, price);
-    // add price to sellers budget
     await creditTeam(seller.id, price);
-    // associate listing with the buyer team
     await listing.setToTeam(buyer);
-    // associate the player with the buyer team
     await buyer.addPlayer(player);
-    // increase plyaer value;
-    await player.set({ value: value * (1 + (getRandomPercentage() / 100)) });
-    // mark the listing as complete
-    await listing.set({ status: 'complete' }).save();
-    // return the successful listing
+    await player.set({ value: value * (1 + (getRandomPercentage() / 100)) }).save();
+    await listing.set({ status: 'complete', completedAt: Date.now() }).save();
     return listing;
   } catch (e) {
     throwError(e.message);
   }
 };
-
-// /**
-//  * Filter the user object before returning it
-//  * @function filterUser
-//  *
-//  * @param {object} userData - User data to be filtered
-//  *
-//  * @return {object} - Filtered user object
-//  */
-// const filterUser = ({ id, username, email }) => ({
-//   id,
-//   username,
-//   email
-// });
-
-// /**
-//  * Get a user by email or username
-//  * @function getUserByIdentifier
-//  *
-//  * @param {string} identifier - User email or username
-//  *
-//  * @return {Promise} - Resolves to user or error
-//  */
-// const getUserByIdentifier = (identifier) => User.findOne({
-//   where: {
-//     $or: {
-//       username: identifier,
-//       email: identifier
-//     }
-//   }
-// })
-//   .then((user) => {
-//     if (!user) throwError(userErrors.USER_NOT_FOUND);
-//     return user;
-//   });
-
-// /**
-//  * Send the user object with the response object from the server
-//  * @function sendUser
-//  *
-//  * @param {object} user - User object to be sent
-//  * @param {number} status - Server status
-//  * @param {object} res - Server response object
-//  *
-//  * @return {void}
-//  */
-// const sendUser = (user, status, res) => res.status(status).send({
-//   user: filterUser(user)
-// });
 
 module.exports = {
   listPlayer,

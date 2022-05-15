@@ -29,7 +29,7 @@ const { createPlayer } = require('./player');
  * @returns {Promise<Team>} - Resolves to team or an error.
  */
 const confirmTeamExists = async (id) => {
-  const team = await Team.findById(id);
+  const team = await Team.findByPk(id);
 
   if (!team) throwError(TeamErrors.TEAM_NOT_FOUND);
   return team;
