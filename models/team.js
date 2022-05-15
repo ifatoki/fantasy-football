@@ -29,6 +29,18 @@ module.exports = (sequelize, DataTypes) => {
       set(value) {
         this.setDataValue('budget', Math.floor(value * 100));
       }
+    },
+    value: {
+      type: DataTypes.VIRTUAL,
+      get() {
+        const players = this.Players;
+
+        const val = players.reduce((sum, player) => (sum + player.value), 0);
+        return val;
+      },
+      set() {
+        throw new Error('Do not try to set the value field');
+      }
     }
   }, {
     sequelize,
