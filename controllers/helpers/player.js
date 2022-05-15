@@ -49,6 +49,26 @@ const getCurrentOpenPlayerListing = async (player) => {
 };
 
 /**
+ * Change player firstname, lastname and/or country
+ * @function editPlayer
+ *
+ * @param {number} id - Player id
+ * @param {object} data - Data to append to the player
+ *
+ * @return {Promise<Player>} - Resolves to the edited Player
+ */
+const editPlayer = async (id, { firstName, lastName, country }) => {
+  const data = {};
+  let player = await confirmPlayerExists(id);
+
+  if (firstName) data.firstName = firstName;
+  if (lastName) data.lastName = lastName;
+  if (country) data.country = country;
+  player = await player.set(data).save();
+  return player;
+};
+
+/**
  * Creates new Player in the database
  * @function createPlayer
  *
@@ -124,5 +144,6 @@ const createPlayer = async (position) => {
 module.exports = {
   createPlayer,
   confirmPlayerExists,
+  editPlayer,
   getCurrentOpenPlayerListing
 };

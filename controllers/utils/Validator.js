@@ -203,6 +203,20 @@ class Validator {
 
     return resolveErrors(this.errors);
   }
+
+  static validatePlayerEdit({ firstName, lastName, country }) {
+    this.errors = {};
+
+    if (
+      (firstName === undefined || validator.isEmpty(firstName.toString()))
+      && (lastName === undefined || validator.isEmpty(lastName.toString()))
+      && (country === undefined || validator.isEmpty(country.toString()))
+    ) {
+      this.errors.name = "at least one of 'firstname', 'lastname', and 'country' is required";
+    }
+
+    return resolveErrors(this.errors);
+  }
 }
 
 module.exports = Validator;
