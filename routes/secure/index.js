@@ -1,5 +1,8 @@
 const express = require('express');
-const { editPlayerController } = require('../../controllers/player');
+const {
+  editPlayerController,
+  playerGetController
+} = require('../../controllers/player');
 const {
   playerListingController,
   playerDelistingController,
@@ -18,6 +21,7 @@ router.get('/user', getUserController);
 router.get('/team', getTeamController);
 router.put('/team/edit', editTeamController);
 
+router.get('/players/:id', playerGetController);
 router.post('/players/:id/list', playerListingController);
 router.put('/players/:id/buy', playerBuyingController);
 router.put('/players/:id/delist', playerDelistingController);
