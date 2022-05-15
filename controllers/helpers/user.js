@@ -118,7 +118,6 @@ const sendUser = (user, status, res) => res.status(status).send({
 
 module.exports = {
   confirmEmailUniqueness,
-  confirmUserExists,
   createUser,
   getUserByIdentifier,
   sendUser

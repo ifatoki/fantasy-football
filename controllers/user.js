@@ -17,7 +17,26 @@ const {
 } = require('./utils/Generic');
 
 /**
- * Sign user in
+ * Get User Controller
+ * @function getUserHandler
+ *
+ * @param {any} req - Server request object
+ * @param {any} res - Server response object
+ *
+ * @return {void}
+ */
+const getUserHandler = async (req, res) => {
+  try {
+    const { user } = req;
+
+    sendData({ user }, 200, 'success', res);
+  } catch (e) {
+    resolveError(e, res);
+  }
+};
+
+/**
+ * Sign In Controller
  * @function signIn
  *
  * @param {any} req - Server request object
@@ -52,7 +71,7 @@ const signIn = async (req, res) => {
 };
 
 /**
- * Create new user account
+ * Sign Up Controller
  * @function signUp
  *
  * @param {any} req - Server request object
@@ -88,5 +107,6 @@ const signUp = async (req, res) => {
 
 module.exports = {
   signIn,
-  signUp
+  signUp,
+  getUserHandler
 };
