@@ -7,15 +7,22 @@ const { userErrors } = require('./Errors');
  *
  * @param {string} message - Response message
  * @param {number} status - Server response code
+ * @param {string} statusMessage - String 'success' or 'failed' representing request state
  * @param {object} res - Server response object
  *
  * @return {void}
  */
-const sendMessage = (message, status, res) => {
+const sendMessage = (message, status, statusMessage, res) => {
   res.status(status).send({
+    status: statusMessage,
     message
   });
 };
+
+const sendData = (data, status, statusMessage, res) => res.status(status).send({
+  status: statusMessage,
+  data
+});
 
 /**
  * Resolve errors generated on endpoints
@@ -47,12 +54,16 @@ const resolveError = (error, res) => {
       status = 404;
       message = 'user not found';
       break;
+    case authenticationErrors.AUTH_INVALID_TOKEN:
+      status = 401;
+      message = 'invalid auth token';
+      break;
     default:
       status = 500;
       message = 'oops, our server just went rogue. please try again';
       break;
   }
-  sendMessage(message, status, res);
+  sendMessage(message, status, 'failed', res);
 };
 
 /**

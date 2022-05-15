@@ -1,5 +1,5 @@
 const { Op } = require('sequelize');
-const { User } = require('../../models');
+const { User, Team } = require('../../models');
 const { userErrors } = require('../utils/Errors');
 const { createTeam } = require('./team');
 const { throwError } = require('../utils/Generic');
@@ -29,7 +29,7 @@ const confirmEmailUniqueness = async (email) => {
  * @returns {Promise<User>} - Resolves to user or an error.
  */
 const confirmUserExists = async (id) => {
-  const user = await User.findById(id);
+  const user = await User.findByPk(id);
 
   if (!user) throwError(userErrors.USER_NOT_FOUND);
   return user;
@@ -70,12 +70,11 @@ const createUser = async (userData, hashedPassword) => {
  * @return {object} - Filtered user object
  */
 const filterUser = ({
-  id, alias, email, teamId
+  id, alias, email
 }) => ({
   id,
   alias,
-  email,
-  teamId
+  email
 });
 
 /**
@@ -83,18 +82,22 @@ const filterUser = ({
  * @function getUserByIdentifier
  *
  * @param {string} identifier - User email or username
+ * @param {boolean} includeTeam - true, to include the Team.
  *
  * @return {Promise<User>} - Resolves to user or error
  */
-const getUserByIdentifier = async (identifier) => {
-  const user = await User.findOne({
+const getUserByIdentifier = async (identifier, includeTeam = false) => {
+  const query = {
     where: {
       [Op.or]: [
         { alias: identifier },
         { email: identifier }
       ]
     }
-  });
+  };
+
+  if (includeTeam) query.include = Team;
+  const user = await User.findOne(query);
   if (!user) throwError(userErrors.USER_NOT_FOUND);
   return user;
 };

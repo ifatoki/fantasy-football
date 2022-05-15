@@ -1,22 +1,22 @@
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const { faker } = require('@faker-js/faker');
-const { userErrors } = require('./Errors');
-const { throwError } = require('./Generic');
+const { userErrors, authenticationErrors } = require('./Errors');
+const { throwError, resolveError } = require('./Generic');
+const { getUserByIdentifier } = require('../helpers/user');
 
 /**
  * Compare user supplied password to hashed user password.
  * @function comparePassword
  *
  * @param {string} userPassword - Password supplied by user
- * @param {User} user - The user object
+ * @param {string} hashedPassword - The hashed password
  *
- * @return {User} - The user
+ * @return {void}
  */
-const comparePassword = (userPassword, user) => {
-  const match = bcrypt.compareSync(userPassword, user.hashedPassword);
+const comparePassword = (userPassword, hashedPassword) => {
+  const match = bcrypt.compareSync(userPassword, hashedPassword);
 
   if (!match) throwError(userErrors.USER_INVALID_PASSWORD);
-  return user;
 };
 
 /**
@@ -34,8 +34,22 @@ const encryptPassword = (password) => {
 };
 
 /**
- * Simulate inserting user in req after authentication
- * @function injectMockuser
+ * Generate a jwt token for the passed user;
+ * @function generateUserToken
+ *
+ * @param {object} user - User to generate token for
+ *
+ * @return {Promise<string>} - Resolves to the generated jwt
+ */
+const generateUserToken = async (user) => {
+  const { id, alias, email } = user;
+
+  return jwt.sign({ id, alias, email }, process.env.TOKEN_SECRET, { expiresIn: '3600s' });
+};
+
+/**
+ * Authenticate the request
+ * @function authenticate
  *
  * @param {object} req - Server request object
  * @param {object} res - Server response object
@@ -43,14 +57,25 @@ const encryptPassword = (password) => {
  * =
  * @returns {void}
  */
-const injectMockUser = (req, res, next) => {
-  req.user = {
-    id: 1,
-    username: faker.internet.userName()
-  };
-  next();
+const authenticate = async (req, res, next) => {
+  try {
+    const { authorization } = req.headers;
+    const token = authorization.split(' ')[1];
+
+    if (!token) throwError(authenticationErrors.AUTH_INVALID_TOKEN);
+    let user = jwt.verify(token, process.env.TOKEN_SECRET);
+
+    user = await getUserByIdentifier(user.email);
+    req.user = user;
+    next();
+  } catch (e) {
+    resolveError(new Error(authenticationErrors.AUTH_INVALID_TOKEN), res);
+  }
 };
 
 module.exports = {
-  comparePassword, encryptPassword, injectMockUser
+  comparePassword,
+  encryptPassword,
+  authenticate,
+  generateUserToken
 };

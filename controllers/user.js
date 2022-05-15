@@ -1,9 +1,20 @@
 const Validator = require('./utils/Validator');
 const {
-  confirmEmailUniqueness, getUserByIdentifier, createUser, sendUser
+  comparePassword,
+  encryptPassword,
+  generateUserToken
+} = require('./utils/Authentication');
+const {
+  confirmEmailUniqueness,
+  getUserByIdentifier,
+  createUser
 } = require('./helpers/user');
-const { comparePassword, encryptPassword } = require('./utils/Authentication');
-const { resolveError, sendMessage, stringifyValidationErrors } = require('./utils/Generic');
+const {
+  resolveError,
+  sendMessage,
+  stringifyValidationErrors,
+  sendData
+} = require('./utils/Generic');
 
 /**
  * Sign user in
@@ -22,13 +33,21 @@ const signIn = async (req, res) => {
       const { identifier, password } = req.body;
       const user = await getUserByIdentifier(identifier);
 
-      comparePassword(password, user);
-      sendUser(user, 200, res);
+      comparePassword(password, user.hashedPassword);
+      const token = await generateUserToken(user);
+      const { id, alias, email } = user;
+
+      const data = {
+        token,
+        user: { id, alias, email }
+      };
+
+      sendData(data, 200, 'success', res);
     } catch (e) {
       resolveError(e, res);
     }
   } else {
-    sendMessage(stringifyValidationErrors(validator.errors), 400, res);
+    sendMessage(stringifyValidationErrors(validator.errors), 400, 'failed', res);
   }
 };
 
@@ -50,13 +69,20 @@ const signUp = async (req, res) => {
       await confirmEmailUniqueness(email);
       const hash = encryptPassword(password);
       const user = await createUser(req.body, hash);
+      const token = await generateUserToken(user);
+      const { id, alias } = user;
 
-      sendUser(user, 201, res);
+      const data = {
+        token,
+        user: { id, alias, email }
+      };
+
+      sendData(data, 201, 'success', res);
     } catch (e) {
       resolveError(e, res);
     }
   } else {
-    sendMessage(stringifyValidationErrors(validator.errors), 400, res);
+    sendMessage(stringifyValidationErrors(validator.errors), 400, 'failed', res);
   }
 };
 

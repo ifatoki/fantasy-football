@@ -20,7 +20,11 @@ const transferErrors = {
   TRANSFER_LISTING_NOT_FOUND: 502,
   TRANSFER_INVALID_ID: 503,
   TRANSFER_COMPLETED_ALREADY: 504,
-  TRANSFER_DELISTED_ALREADY: 505
+  TRANSFER_DELISTED_ALREADY: 505,
+};
+
+const authenticationErrors = {
+  AUTH_INVALID_TOKEN: 603
 };
 
 const genericErrors = {
@@ -33,5 +37,6 @@ module.exports = {
   teamErrors,
   playerErrors,
   transferErrors,
-  genericErrors
+  genericErrors,
+  authenticationErrors
 };
