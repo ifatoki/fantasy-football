@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Transfer.init({
     price: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       get() {
         return this.getDataValue('price') / 100;
       },
