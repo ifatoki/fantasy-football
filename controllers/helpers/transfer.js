@@ -26,6 +26,20 @@ const confirmListingExists = async (id) => {
 };
 
 /**
+ * Fetch transfer listings based on filter
+ * @function listingsFetch
+ *
+ * @param {object} filter - Filter for transfers
+ *
+ * @returns {Promise<[Transfer]>} - Resolves to array of matching Transfers
+ */
+const listingsFetch = async (filter) => {
+  const transfers = await Transfer.findAll({ where: filter });
+
+  return transfers;
+};
+
+/**
  * Confirm is a listing is still pending
  * @function confirmListingIsPending
  *
@@ -145,6 +159,7 @@ const completeTransfer = async (id, buyerId) => {
 };
 
 module.exports = {
+  listingsFetch,
   listPlayer,
   delistTransfer,
   completeTransfer

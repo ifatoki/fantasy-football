@@ -10,6 +10,7 @@ const {
   getTeamController,
   editTeamController
 } = require('../../controllers/team');
+const { transfersFetchController } = require('../../controllers/transfer');
 const {
   getUserController
 } = require('../../controllers/user');
@@ -17,6 +18,8 @@ const {
 const router = express.Router();
 
 router.get('/user', getUserController);
+
+router.get('/transfers', transfersFetchController);
 
 router.get('/team', getTeamController);
 router.put('/team/edit', editTeamController);
