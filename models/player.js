@@ -44,7 +44,8 @@ module.exports = (sequelize, DataTypes) => {
     age: {
       type: DataTypes.VIRTUAL,
       get() {
-        return getAge(this.getDataValue('dob'));
+        if (!this.dob) return;
+        return getAge(this.dob);
       },
       set() {
         throw new Error('Do not try to set the `age` value!');

@@ -5,7 +5,7 @@ const {
 } = require('../utils/Errors');
 const {
   throwError,
-  getRandomPercentage
+  getRandomInRange
 } = require('../utils/Generic');
 const { getCurrentOpenPlayerListing } = require('./player');
 const { debitTeam, creditTeam } = require('./team');
@@ -147,7 +147,7 @@ const completeTransfer = async (id, buyerId) => {
     // Subtract presale value from seller value
     await seller.set({ value: sellerValue - player.value }).save();
     await buyer.addPlayer(player);
-    await player.set({ value: value * (1 + (getRandomPercentage() / 100)) }).save();
+    await player.set({ value: value * (1 + (getRandomInRange(10, 101) / 100)) }).save();
 
     // Add postsale value to buyer value
     await buyer.set({ value: buyerValue + player.value }).save();

@@ -144,14 +144,6 @@ const throwError = (errorMessage) => {
 };
 
 /**
- * Generate a random date that is between 18 - 40 years ago
- * @function getRandomDOB
- *
- * @return {Date} - Random Date
- */
-const getRandomDOB = () => new Date('01/28/1991');
-
-/**
  * Returns a random number between min (inclusive) and max (exclusive)
  *
  * @param {number} min - Minimum number(inclusive)
@@ -159,7 +151,28 @@ const getRandomDOB = () => new Date('01/28/1991');
  *
  * @return {number} - Random percentage
  */
-const getRandomPercentage = (min = 10, max = 101) => Math.random() * (max - min) + min;
+const getRandomInRange = (min = 0, max = 10) => Math.random() * (max - min) + min;
+
+/**
+ * Generate a random date that is between 18 - 40 years ago
+ * @function getRandomDOB
+ *
+ * @return {Date} - Random Date
+ */
+const getRandomDOB = () => {
+  const today = new Date();
+  const randYearFactor = Math.floor(getRandomInRange(18, 41));
+  const year = today.getUTCFullYear() - randYearFactor;
+  let month = Math.floor(getRandomInRange(1, today.getMonth()));
+  let day = Math.floor(getRandomInRange(1, today.getDate() - 1));
+
+  if (randYearFactor === 40) {
+    month = Math.floor(getRandomInRange(today.getMonth() + 1, 13));
+    day = Math.floor(getRandomInRange(today.getDate() + 1, 29));
+  }
+
+  return new Date(`${month}/${day}/${year}`);
+};
 
 /**
  * Calculates and returns age based on birthDate
@@ -187,6 +200,6 @@ module.exports = {
   stringifyValidationErrors,
   throwError,
   getRandomDOB,
-  getRandomPercentage,
+  getRandomInRange,
   getAge
 };
