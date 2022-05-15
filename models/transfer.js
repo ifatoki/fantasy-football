@@ -16,7 +16,13 @@ module.exports = (sequelize, DataTypes) => {
   }
   Transfer.init({
     price: {
-      type: DataTypes.DECIMAL
+      type: DataTypes.INTEGER,
+      get() {
+        return this.getDataValue('price') / 100;
+      },
+      set(value) {
+        this.setDataValue('price', Math.floor(value * 100));
+      }
     },
     status: {
       type: DataTypes.ENUM,

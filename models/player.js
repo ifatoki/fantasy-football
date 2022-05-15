@@ -24,8 +24,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING
     },
     value: {
-      type: DataTypes.DECIMAL,
-      defaultValue: 1000000
+      type: DataTypes.INTEGER,
+      defaultValue: 100000000,
+      get() {
+        return this.getDataValue('value') / 100;
+      },
+      set(value) {
+        this.setDataValue('value', Math.floor(value * 100));
+      }
     },
     position: {
       type: DataTypes.ENUM,

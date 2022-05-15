@@ -21,8 +21,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING
     },
     budget: {
-      type: DataTypes.DECIMAL,
-      defaultValue: 5000000
+      type: DataTypes.INTEGER,
+      defaultValue: 500000000,
+      get() {
+        return this.getDataValue('budget') / 100;
+      },
+      set(value) {
+        this.setDataValue('budget', Math.floor(value * 100));
+      }
     }
   }, {
     sequelize,
