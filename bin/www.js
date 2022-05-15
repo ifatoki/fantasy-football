@@ -78,7 +78,7 @@ const onListening = () => {
 };
 
 // sync() will create all table if they doesn't exist in database
-models.sequelize.sync({ force: true }).then(() => {
+models.sequelize.sync().then(() => {
   /**
  * Listen on provided port, on all network interfaces.
  */

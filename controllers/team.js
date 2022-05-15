@@ -19,9 +19,30 @@ const {
   playerErrors,
   genericErrors
 } = require('./utils/Errors');
+const { getTeam } = require('./helpers/team');
 
 /**
- * List a player on the transfer table
+ * Handles getting team details
+ * @function getTeamController
+ *
+ * @param {any} req - Server request object
+ * @param {any} res - Server response object
+ *
+ * @return {void}
+ */
+const getTeamController = async (req, res) => {
+  try {
+    const { TeamId } = req.user;
+    const team = await getTeam(TeamId, true);
+
+    sendData({ team }, 200, 'success', res);
+  } catch (e) {
+    resolveError(e, res);
+  }
+};
+
+/**
+ * Handles listing a player on the transfer table
  * @function playerListingController
  *
  * @param {any} req - Server request object
@@ -53,7 +74,7 @@ const playerListingController = async (req, res) => {
 };
 
 /**
- * Buy an already listed player on the transfer table
+ * Handles the purchase of an already listed player
  * @function playerBuyingController
  *
  * @param {any} req - Server request object
@@ -76,7 +97,7 @@ const playerBuyingController = async (req, res) => {
 };
 
 /**
- * Remove a player from the transfer table
+ * Handles the removal of a player from the transfer list
  * @function playerDelistingController
  *
  * @param {any} req - Server request object
@@ -103,6 +124,7 @@ const playerDelistingController = async (req, res) => {
 };
 
 module.exports = {
+  getTeamController,
   playerListingController,
   playerDelistingController,
   playerBuyingController

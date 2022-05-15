@@ -17,15 +17,15 @@ const {
 } = require('./utils/Generic');
 
 /**
- * Get User Controller
- * @function getUserHandler
+ * Handles getting user details
+ * @function getUserController
  *
  * @param {any} req - Server request object
  * @param {any} res - Server response object
  *
  * @return {void}
  */
-const getUserHandler = async (req, res) => {
+const getUserController = async (req, res) => {
   try {
     const { user } = req;
 
@@ -36,15 +36,15 @@ const getUserHandler = async (req, res) => {
 };
 
 /**
- * Sign In Controller
- * @function signIn
+ * Handles the sign in operation
+ * @function signInController
  *
  * @param {any} req - Server request object
  * @param {any} res - Server response object
  *
  * @return {void}
  */
-const signIn = async (req, res) => {
+const signInController = async (req, res) => {
   const validator = Validator.validateSignIn(req.body);
 
   if (validator.isValid) {
@@ -71,15 +71,15 @@ const signIn = async (req, res) => {
 };
 
 /**
- * Sign Up Controller
- * @function signUp
+ * Handles the sign up operation
+ * @function signUpController
  *
  * @param {any} req - Server request object
  * @param {any} res - Server response object
  *
  * @return {void}
  */
-const signUp = async (req, res) => {
+const signUpController = async (req, res) => {
   const validator = Validator.validateSignUp(req.body);
   const { email, password } = req.body;
 
@@ -106,7 +106,7 @@ const signUp = async (req, res) => {
 };
 
 module.exports = {
-  signIn,
-  signUp,
-  getUserHandler
+  signInController,
+  signUpController,
+  getUserController
 };

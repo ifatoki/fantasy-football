@@ -1,5 +1,5 @@
 const { faker } = require('@faker-js/faker');
-const { Team } = require('../../models');
+const { Team, Player } = require('../../models');
 const { TeamErrors, teamErrors } = require('../utils/Errors');
 const { throwError } = require('../utils/Generic');
 const { createPlayer } = require('./player');
@@ -32,6 +32,25 @@ const confirmTeamExists = async (id) => {
   const team = await Team.findByPk(id);
 
   if (!team) throwError(TeamErrors.TEAM_NOT_FOUND);
+  return team;
+};
+
+/**
+ * Get the details of a team
+ * @function getTeam
+ *
+ * @param {number} id - Team id to fetch
+ * @param {boolean} includePlayers - true, to include players in the dataset
+ *
+ * @returns {Promise<Team>} - Resolves to the requested TEam
+ */
+const getTeam = async (id, includePlayers = false) => {
+  const options = {};
+
+  if (includePlayers) options.include = Player;
+  const team = await Team.findByPk(id, options);
+
+  if (!team) throwError(teamErrors.TEAM_NOT_FOUND);
   return team;
 };
 
@@ -119,58 +138,10 @@ const createTeam = async () => {
   }
 };
 
-// /**
-//  * Filter the user object before returning it
-//  * @function filterUser
-//  *
-//  * @param {object} userData - User data to be filtered
-//  *
-//  * @return {object} - Filtered user object
-//  */
-// const filterUser = ({ id, username, email }) => ({
-//   id,
-//   username,
-//   email
-// });
-
-// /**
-//  * Get a user by email or username
-//  * @function getUserByIdentifier
-//  *
-//  * @param {string} identifier - User email or username
-//  *
-//  * @return {Promise} - Resolves to user or error
-//  */
-// const getUserByIdentifier = (identifier) => User.findOne({
-//   where: {
-//     $or: {
-//       username: identifier,
-//       email: identifier
-//     }
-//   }
-// })
-//   .then((user) => {
-//     if (!user) throwError(userErrors.USER_NOT_FOUND);
-//     return user;
-//   });
-
-// /**
-//  * Send the user object with the response object from the server
-//  * @function sendUser
-//  *
-//  * @param {object} user - User object to be sent
-//  * @param {number} status - Server status
-//  * @param {object} res - Server response object
-//  *
-//  * @return {void}
-//  */
-// const sendUser = (user, status, res) => res.status(status).send({
-//   user: filterUser(user)
-// });
-
 module.exports = {
   createTeam,
   creditTeam,
   debitTeam,
-  confirmTeamExists
+  confirmTeamExists,
+  getTeam
 };
