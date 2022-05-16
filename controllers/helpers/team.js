@@ -99,10 +99,11 @@ const creditTeam = async (id, amount) => {
  * @function initializePlayers
  *
  * @param {Team} team - Team to initialize the players in.
+ * @param {object} transaction - The transaction this is a part of.
  *
  * @return {Promise<void>}
  */
-const initializePlayers = async (team) => {
+const initializePlayers = async (team, transaction) => {
   const playersPromises = [];
   const playersMap = new Map(Object.entries({
     gk: 3,
@@ -113,29 +114,31 @@ const initializePlayers = async (team) => {
 
   playersMap.forEach((count, pos) => {
     for (let i = 1; i <= count; i += 1) {
-      playersPromises.push(createPlayer(pos));
+      playersPromises.push(createPlayer(pos, transaction));
     }
   });
   const players = await Promise.all(playersPromises);
 
-  team.addPlayers(players);
-  await team.set({ value: 1000000 * players.length }).save();
+  team.addPlayers(players, { transaction });
+  await team.set({ value: 1000000 * players.length }).save({ transaction });
 };
 
 /**
  * Creates new Team in the database
  * @function createTeam
  *
+ * @param {object} transaction - The transaction this is a part of.
+ *
  * @returns {Promise<Team>} - Resolves to Team object or Error
  */
-const createTeam = async () => {
+const createTeam = async (transaction) => {
   try {
     const team = await Team.create({
       name: faker.random.word(),
       country: faker.address.country()
-    });
+    }, { transaction });
 
-    await initializePlayers(team);
+    await initializePlayers(team, transaction);
     return team;
   } catch (e) {
     throwError(e.message);

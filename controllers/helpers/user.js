@@ -1,5 +1,5 @@
 const { Op } = require('sequelize');
-const { User, Team } = require('../../models');
+const { User, Team, sequelize } = require('../../models');
 const { userErrors } = require('../utils/Errors');
 const { createTeam } = require('./team');
 const { throwError } = require('../utils/Generic');
@@ -45,18 +45,22 @@ const confirmUserExists = async (id) => {
  * @returns {Promise} - Resolves to User object or Error
  */
 const createUser = async (userData, hashedPassword) => {
+  const transaction = await sequelize.transaction();
+
   try {
     const [team, user] = await Promise.all([
-      createTeam(),
+      createTeam(transaction),
       User.create({
         ...userData,
         hashedPassword
-      })
+      }, { transaction })
     ]);
 
-    await user.setTeam(team);
+    await user.setTeam(team, { transaction });
+    await transaction.commit();
     return user;
   } catch (e) {
+    await transaction.rollback();
     throwError(e.message);
   }
 };

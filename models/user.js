@@ -24,6 +24,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     hashedPassword: {
       type: DataTypes.STRING(60),
+      allowNull: false,
       validate: {
         is: /^\S{60}$/
       }

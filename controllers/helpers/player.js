@@ -57,10 +57,11 @@ const editPlayer = async (id, { firstName, lastName, country }) => {
  * @function createPlayer
  *
  * @param {string} position - Position the player plays.
+ * @param {object} transaction - The transaction this is a part of.
  *
  * @returns {Promise<Player>} - Resolves to Player object or Error.
  */
-const createPlayer = async (position) => {
+const createPlayer = async (position, transaction) => {
   try {
     const player = await Player.create({
       firstName: faker.name.firstName('male'),
@@ -68,7 +69,7 @@ const createPlayer = async (position) => {
       country: faker.address.country(),
       position,
       dob: getRandomDOB()
-    });
+    }, { transaction });
 
     return player;
   } catch (e) {
