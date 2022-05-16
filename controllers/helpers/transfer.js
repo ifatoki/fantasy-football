@@ -1,4 +1,4 @@
-const { Transfer } = require('../../models');
+const { Transfer, sequelize } = require('../../models');
 const {
   transferErrors,
   teamErrors
@@ -80,6 +80,8 @@ const confirmListingIsPending = async (id) => {
  * @returns {Promise<Transfer>} - Resolves to the Transfer listing.
  */
 const listPlayer = async (player, askingPrice) => {
+  const transaction = await sequelize.transaction();
+
   try {
     const openListing = await getCurrentOpenPlayerListing(player);
 
@@ -87,14 +89,16 @@ const listPlayer = async (player, askingPrice) => {
     const team = await player.getTeam();
     const listing = await Transfer.create({
       price: askingPrice
-    });
+    }, { transaction });
 
     await Promise.all([
-      listing.setPlayer(player),
-      listing.setFromTeam(team)
+      listing.setPlayer(player, { transaction }),
+      listing.setFromTeam(team, { transaction })
     ]);
+    await transaction.commit();
     return listing;
   } catch (e) {
+    await transaction.rollback();
     throwError(e.message);
   }
 };
