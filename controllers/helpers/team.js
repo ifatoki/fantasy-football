@@ -4,22 +4,6 @@ const { TeamErrors, teamErrors } = require('../utils/Errors');
 const { throwError } = require('../utils/Generic');
 const { createPlayer } = require('./player');
 
-// /**
-//  * Confirm if email is unique
-//  * @function confirmEmailUniqueness
-//  *
-//  * @param {string} email - Email Address to check
-//  *
-//  * @return {Promise<void>}
-//  *
-//  * @throws {Error} - Error indicating duplication
-//  */
-// const confirmEmailUniqueness = async (email) => {
-//   const user = await User.findOne({ where: { email } });
-
-//   if (user) throwError(userErrors.USER_DUPLICATE_EMAIL);
-// };
-
 /**
  * Confirm the existence of a Team with the passed id
  * @function confirmTeamExists

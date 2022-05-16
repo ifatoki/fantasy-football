@@ -22,103 +22,6 @@ const resolveErrors = (errors) => ({
  */
 class Validator {
   /**
-   * Validate data for creating new message and adding it to a group
-   * @function validateAddNewMessageToGroup
-   *
-   * @static
-   *
-   * @param {object} actionData - Object containing message and group data
-   *
-   * @returns {object} - An object containing errors and isValid
-   *
-   * @memberof Validator
-   */
-  static validateAddNewMessageToGroup({
-    groupId, title
-  }) {
-    this.errors = {};
-
-    if (!validator.isNumeric(groupId.toString())) {
-      this.errors.groupId = 'groupId is invalid. enter a number';
-    }
-    if (title === undefined || validator.isEmpty(title.toString())) {
-      this.errors.title = 'title is required';
-    }
-
-    return resolveErrors(this.errors);
-  }
-
-  /**
-   * Validate data for adding user to group
-   * @function validateAddUserToGroup
-   *
-   * @static
-   *
-   * @param {object} actionData
-   *
-   * @returns {object} - An object containing errors and isValid
-   *
-   * @memberof Validator
-   */
-  static validateAddUserToGroup({
-    groupId, userId
-  }) {
-    this.errors = {};
-
-    if (!validator.isNumeric(groupId.toString())) {
-      this.errors.groupId = 'groupId is invalid. enter a number';
-    }
-    if (userId === undefined) {
-      this.errors.userId = 'userId is required';
-    } else if (!validator.isNumeric(userId.toString())) {
-      this.errors.userId = 'userId is invalid. enter a number';
-    }
-    return resolveErrors(this.errors);
-  }
-
-  /**
-   * Confirms the validity of data used to create new groups
-   * @method validateNewGroup
-   *
-   * @static
-   *
-   * @param {object} groupData - Data for creating new group
-   *
-   * @returns {object} - An object containing errors and isValid
-   *
-   * @memberof Validator
-   */
-  static validateNewGroup({ name }) {
-    this.errors = {};
-    if (name === undefined || validator.isEmpty(name.toString())) {
-      this.errors.name = 'group name is required';
-    }
-    return resolveErrors(this.errors);
-  }
-
-  /**
-   * Confirms validity of groupId to be used to fetch messages
-   * @method validateFetchGroupMessages
-   *
-   * @static
-   *
-   * @param {number} groupId - Id of group whose messages should be fetched
-   *
-   * @returns {object} - An object containing errors and isValid
-   *
-   * @memberof Validator
-   */
-  static validateFetchGroupMessages(groupId) {
-    this.errors = {};
-
-    if (!validator.isNumeric(groupId.toString())) {
-      this.errors.groupId = 'groupId is invalid. enter a number';
-    }
-
-    return resolveErrors(this.errors);
-  }
-
-  /**
    * Confirms the validity of user login data
    * @method validateSignIn
    *
@@ -135,7 +38,7 @@ class Validator {
   }) {
     this.errors = {};
     if (identifier === undefined || validator.isEmpty(identifier.toString())) {
-      this.errors.identifier = 'email or username is required';
+      this.errors.identifier = 'email is required';
     }
     if (password === undefined || validator.isEmpty(password.toString())) {
       this.errors.password = 'password is required';
