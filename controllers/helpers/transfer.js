@@ -131,6 +131,8 @@ const delistTransfer = async (id) => {
  * @return {Promise<Transfer>} - Resolves to the completed Transfer.
  */
 const completeTransfer = async (id, buyerId) => {
+  const transaction = await sequelize.transaction();
+
   try {
     const listing = await confirmListingIsPending(id);
     const seller = await listing.getFromTeam();
@@ -141,23 +143,27 @@ const completeTransfer = async (id, buyerId) => {
     if (seller.id === buyerId) {
       throwError(teamErrors.TEAM_PLAYER_ALREADY_OWNED);
     }
-    const buyer = await debitTeam(buyerId, price);
-    await creditTeam(seller.id, price);
-    await listing.setToTeam(buyer);
+    const buyer = await debitTeam(buyerId, price, transaction);
+    await creditTeam(seller.id, price, transaction);
+    await listing.setToTeam(buyer, { transaction });
 
     const buyerValue = buyer.value;
     const sellerValue = seller.value;
 
     // Subtract presale value from seller value
-    await seller.set({ value: sellerValue - player.value }).save();
-    await buyer.addPlayer(player);
-    await player.set({ value: value * (1 + (getRandomInRange(10, 101) / 100)) }).save();
+    await seller.set({ value: sellerValue - player.value }).save({ transaction });
+    await buyer.addPlayer(player, { transaction });
+    await player
+      .set({ value: value * (1 + (getRandomInRange(10, 101) / 100)) })
+      .save({ transaction });
 
     // Add postsale value to buyer value
-    await buyer.set({ value: buyerValue + player.value }).save();
-    await listing.set({ status: 'complete', completedAt: Date.now() }).save();
+    await buyer.set({ value: buyerValue + player.value }).save({ transaction });
+    await listing.set({ status: 'complete', completedAt: Date.now() }).save({ transaction });
+    await transaction.commit();
     return listing;
   } catch (e) {
+    await transaction.rollback();
     throwError(e.message);
   }
 };

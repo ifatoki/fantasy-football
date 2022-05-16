@@ -63,16 +63,17 @@ const editTeam = async (id, { name, country }) => {
  *
  * @param {number} id - Team Id
  * @param {number} amount - Amount to be deducted from the team budget
+ * @param {object} transaction - The transaction this is a part of.
  *
  * @returns {Promise<Team>} - Resolves to the team.
  */
-const debitTeam = async (id, amount) => {
+const debitTeam = async (id, amount, transaction) => {
   const team = await confirmTeamExists(id);
   let { budget } = team;
 
   if (budget < amount) throwError(teamErrors.TEAM_INSUFFICIENT_BUDGET);
   budget -= amount;
-  await team.set({ budget }).save();
+  await team.set({ budget }).save({ transaction });
   return team;
 };
 
@@ -82,15 +83,16 @@ const debitTeam = async (id, amount) => {
  *
  * @param {number} id - Team Id
  * @param {number} amount - Amount to be included to the team budget
+ * @param {object} transaction - The transaction this is a part of.
  *
  * @returns {Promise<Team>} - Resolves to the team.
  */
-const creditTeam = async (id, amount) => {
+const creditTeam = async (id, amount, transaction) => {
   const team = await confirmTeamExists(id);
   let { budget } = team;
 
   budget += amount;
-  await team.set({ budget }).save();
+  await team.set({ budget }).save({ transaction });
   return team;
 };
 
