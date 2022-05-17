@@ -5,7 +5,8 @@
   "main": "./bin/www",
   "scripts": {
     "dev": "DEBUG=server npx nodemon --watch . ./bin/www",
-    "start": "DEBUG=server node ./bin/www"
+    "start": "DEBUG=server node ./bin/www",
+    "heroku-deploy": "git push heroku main"
   },
   "repository": {
     "type": "git",
