@@ -1,22 +1,22 @@
 {
   "name": "fantasy-football",
   "version": "1.0.0",
-  "description": "Broadcast messages to groups across your organisation",
-  "main": "index.js",
+  "description": "A RESTful API for a simple application where football/soccer fans will create fantasy teams and will be able to sell or buy players.",
+  "main": "./bin/www",
   "scripts": {
     "dev": "DEBUG=server npx nodemon --watch . ./bin/www",
     "start": "DEBUG=server node ./bin/www"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/andela-ifatoki/postit.git"
+    "url": "https://git.toptal.com/screening/Itunu-Fatoki.git"
   },
   "author": "Itunuloluwa Fatoki",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/andela-ifatoki/postit/issues"
+    "url": "https://git.toptal.com/screening/Itunu-Fatoki/-/issues"
   },
-  "homepage": "https://github.com/andela-ifatoki/postit#readme",
+  "homepage": "https://documenter.getpostman.com/view/2602351/UyxjHmcP",
   "dependencies": {
     "@faker-js/faker": "^6.3.1",
     "bcryptjs": "^2.4.3",
