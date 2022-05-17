@@ -41,9 +41,9 @@ const playerIsTransferListed = async (player) => {
  * @return {Promise<Transfer>} - Resolves to the open transfer listing for this player
  */
 const getCurrentOpenPlayerListing = async (player) => {
-  const transfers = await player.getPendingTransfers();
+  const pendingTransfers = await player.getTransfers({ where: { status: 'pending' } });
 
-  return transfers[0];
+  return pendingTransfers[0];
 };
 
 /**
