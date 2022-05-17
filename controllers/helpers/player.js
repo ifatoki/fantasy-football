@@ -19,6 +19,20 @@ const confirmPlayerExists = async (id) => {
 };
 
 /**
+ * Find out if a player is transfer listed or not.
+ * @function playerIsTransferListed
+ *
+ * @param {object} player - Player to be validated
+ *
+ * @returns {Promise<Player||false>} - Resolves to a Player or false;
+ */
+const playerIsTransferListed = async (player) => {
+  const pendingTransfers = await player.getTransfers({ where: { status: 'pending' } });
+
+  return pendingTransfers.length > 0;
+};
+
+/**
  * Get the current open transfer listing for this player
  * @function getCurrentOpenPlayerListing
  *
@@ -27,9 +41,9 @@ const confirmPlayerExists = async (id) => {
  * @return {Promise<Transfer>} - Resolves to the open transfer listing for this player
  */
 const getCurrentOpenPlayerListing = async (player) => {
-  const transfers = await player.getTransfers();
+  const transfers = await player.getPendingTransfers();
 
-  return transfers.find(({ status }) => (status === 'pending'));
+  return transfers[0];
 };
 
 /**
@@ -81,5 +95,6 @@ module.exports = {
   createPlayer,
   confirmPlayerExists,
   editPlayer,
-  getCurrentOpenPlayerListing
+  getCurrentOpenPlayerListing,
+  playerIsTransferListed
 };

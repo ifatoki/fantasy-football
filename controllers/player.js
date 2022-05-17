@@ -1,7 +1,8 @@
 const Validator = require('./utils/Validator');
 const {
   editPlayer,
-  confirmPlayerExists
+  confirmPlayerExists,
+  playerIsTransferListed
 } = require('./helpers/player');
 const {
   resolveError,
@@ -25,8 +26,9 @@ const playerGetController = async (req, res) => {
   try {
     const team = await req.user.getTeam();
     const player = await confirmPlayerExists(req.params.id);
+    const isTransferListed = await playerIsTransferListed(player);
 
-    if (player.TeamId !== team.id) {
+    if (!isTransferListed && player.TeamId !== team.id) {
       throwError(genericErrors.UNAUTHORIZED);
     }
 
