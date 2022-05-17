@@ -1,21 +1,22 @@
-# PostIt
-[![Build Status](https://travis-ci.org/andela-ifatoki/postit.svg?branch=development)](https://travis-ci.org/andela-ifatoki/postit)
-[![Coverage Status](https://coveralls.io/repos/github/andela-ifatoki/postit/badge.svg?branch=development)](https://coveralls.io/github/andela-ifatoki/postit?branch=development)
+# Fantasy Football
+
+A RESTful API for a simple application where football/soccer fans will create fantasy teams and will be able to sell or buy players.
+
+## API Documentation
+
+The documentation for the API can be found [here](https://documenter.getpostman.com/view/2602351/UyxjHmcP)
 
 ## Dependencies
+
 ### Development Dependencies
+
 The following depencies are required by the app during developmment
-- Babel-register - This framework helps to compile from es6 to es5
-- eslint - This is a javascript syntax highlighter used to highligh syntax error during the development of this app
-- nyc - Used with mocha for test coverage report
-- sinon - Used with mocha and enzyme for mocking React components during test
-### Dependencies
-- babel-cli - It enables the app scripts to be tested with babel from the command line
-- babel-core - It compiles es6 used in the app to es5
-- babel-loader - Used with Webpack to transpile javascript codes
-- chai - Asscertion library used for the backend testing
-- coveralls - Display test coverage
-- express - Used as the web server for this application
+
+- eslint - A javascript syntax highlighter used to highlight code error and encourage convention
+
+### App Dependencies
+
+- express - Web server for this application
 - json-loader - Enables the app to inport json files.
 - lodash - Used to perform filter on objects
 - pg, pg-hstore, sequelize - Used to create database models and for performing database operations
@@ -29,27 +30,19 @@ Before you install the app locally, ensures you have [NodeJS](https://nodejs.org
 
 - Clone this repository on that directory.
 
-- Using SSH, 
+- Using SSH,
 
-  `git clone git@github.com:andela-ifatoki/postit.git` 
+  `git clone git@git.toptal.com:screening/Itunu-Fatoki.git`
 
-  and https, 
+  and https,
 
-  `git clone https://github.com/andela-ifatoki/postit.git`
+  `git clone https://git.toptal.com/screening/Itunu-Fatoki`
 
-- Navigate into project directory by running `cd postit`
+- Navigate into project directory by running `cd Itunu-Fatoki`
 
 - Run `npm install` to install project dependencies
 
 - Start the app by running `npm run dev`
-
-## Tests
-
-- The server side test are witten with mocha and chai backed with supertest 
-- They are run using the **coverage** tool in order to generate test coverage reports.
-- To run the tests, navigate to the project's root folder
-- Run the following commands.
-- `npm test`
 
 ## Contributing
 
