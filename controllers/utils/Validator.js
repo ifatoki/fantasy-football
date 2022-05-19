@@ -90,6 +90,8 @@ class Validator {
       this.errors.askingPrice = 'askingPrice is required';
     } else if (!validator.isNumeric(askingPrice.toString())) {
       this.errors.askingPrice = 'askingPrice is invalid';
+    } else if (+askingPrice < 0) {
+      this.errors.askingPrice = 'askingPrice has to be greater than 0';
     }
 
     return resolveErrors(this.errors);
